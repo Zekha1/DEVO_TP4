@@ -9,7 +9,7 @@ kubeControllerManager:
 kubeScheduler:
   enabled: false
 
-KubeEtcd:
+kubeEtcd:
   enabled: false
 
 kubeProxy:
@@ -17,5 +17,5 @@ kubeProxy:
 
 prometheus:
   prometheusSpec:
-    serviceMonitorSelectorNiUsesHelmValues: false
+    serviceMonitorSelectorNilUsesHelmValues: false
     ruleSelectorNilUsesHelmValues: false
