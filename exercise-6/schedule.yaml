@@ -1,0 +1,16 @@
+apiVersion: chaos-mesh.org/v1alpha1
+kind: Schedule
+metadata:
+  name: guestbook-pod-kill-schedule
+  namespace: guestbook
+spec:
+  schedule: "*/2 * * * *"
+  type: PodChaos
+  podChaos:
+    action: pod-kill
+    mode: one
+    selector:
+      namespaces:
+        - guestbook
+      labelSelectors:
+        app.kubernetes.io/name: guestbook

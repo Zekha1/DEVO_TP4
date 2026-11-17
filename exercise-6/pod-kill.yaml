@@ -1,0 +1,14 @@
+apiVersion: chaos-mesh.org/v1alpha1
+kind: PodChaos
+metadata:
+  name: guestbook-pod-kill
+  namespace: guestbook
+spec:
+  action: pod-kill
+  mode: one
+  selector:
+    namespaces:
+      - guestbook
+    labelSelectors:
+      app.kubernetes.io/name: guestbook
+  duration: "30s"

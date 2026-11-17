@@ -1,0 +1,19 @@
+apiVersion: chaos-mesh.org/v1alpha1
+kind: NetworkChaos
+metadata:
+  name: redis-delay
+  namespace: data
+spec:
+  action: delay
+  mode: all
+  selector:
+    namespaces:
+      - data
+    labelSelectors:
+      app: redis
+  delay:
+    latency: "500ms"
+    jitter: "0ms"
+    correlation: "0"
+  direction: to
+  duration: "5m"
