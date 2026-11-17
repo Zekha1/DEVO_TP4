@@ -54,7 +54,51 @@ spec:
             description: "{{ $value | humanizePercentage }} of the requests fail."
             runbook_url: https://github.com/<your-account>/devops-class-4/blob/main/exercise-7/guestbook-error-budget-burn.md
         # TODO: GuestbookErrorBudgetBurnSlow, 6x the budget over 6h and 30m, for: 15m, severity: warning
+        - alert: GuestbookErrorBudgetBurnSlow
+          expr: |
+            guestbook:sli_errors:ratio_rate6h > (6 * 0.01)
+            and
+            guestbook:sli_errors:ratio_rate30m > (6 * 0.01)
+          for: 15m
+          labels:
+            severity: warning
+          annotations:
+            summary: Guestbook burns its error budget slowly
+            description: "{{ $value | humanizePercentage }} of the requests fail."
+            runbook_url: https://github.com/Zekha1/DEVO_TP4/blob/main/exercise-7/guestbook-error-budget-burn.md
 
     # TODO: a group "guestbook-health" with
     #   - GuestbookDown: every guestbook target down, or no target at all
     #   - an alert on the cause, with the gauge guestbook_redis_up
+    - name: guestbook-health
+      rules:
+        - alert: GuestbookDown
+          expr: |
+            sum by (namespace) (
+              up{job="guestbook", namespace="guestbook"}
+            ) == 0
+            or
+            label_replace(
+              absent(up{job="guestbook", namespace="guestbook"}),
+              "namespace", "guestbook", "", ""
+            )
+          for: 2m
+          labels:
+            severity: critical
+          annotations:
+            summary: Guestbook is down
+            description: No Guestbook instance is available.
+            runbook_url: https://github.com/Zekha1/DEVO_TP4/blob/main/exercise-7/guestbook-down.md
+
+        - alert: GuestbookRedisDown
+          expr: |
+            min by (namespace) (
+              guestbook_redis_up{namespace="guestbook"}
+            ) == 0
+          for: 2m
+          labels:
+            severity: critical
+          annotations:
+            summary: Guestbook cannot reach Redis
+            description: Redis is unavailable for the Guestbook.
+            runbook_url: https://github.com/Zekha1/DEVO_TP4/blob/main/exercise-7/redis-down.md

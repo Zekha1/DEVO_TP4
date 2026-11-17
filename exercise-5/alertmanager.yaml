@@ -1,0 +1,13 @@
+alertmanager:
+  config:
+    route:
+      receiver: guestbook
+      group_by: ['alertname', 'namespace']
+      routes:
+        - matchers:
+          - namespace="guestbook"
+          receiver: guestbook
+    receivers:
+      - name: guestbook
+        webhook_configs:
+        - url: https://webhook.site/a32ae302-df57-4e7c-a023-c62731c9bec7
