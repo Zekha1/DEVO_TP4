@@ -20,6 +20,8 @@ spec:
       labels:
         {{- include "guestbook.labels" . | nindent 8 }}
     spec:
+      topologySpreadConstraints:
+        {{- toYaml .Values.topologySpreadConstraints | nindent 8 }}
       containers:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"

@@ -35,3 +35,10 @@ autoscaling:
   maxReplicas: 10
   targetCPUUtilizationPercentage: 50
 
+topologySpreadConstraints:
+  - maxSkew: 1
+    topologyKey: kubernetes.io/hostname
+    whenUnsatisfiable: DoNotSchedule
+    labelSelector:
+      matchLabels:
+        app.kubernetes.io/name: guestbook
